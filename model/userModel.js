@@ -1,11 +1,5 @@
-import mongose from "mongoose";
-
-export const connect = () => {
-  mongose.connect("mongodb://127.0.0.1:27017/ostad");
-  console.log("database connected");
-};
-
-const schema = new mongose.Schema(
+import mongoose from "mongoose";
+const schema = new mongoose.Schema(
   {
     username: {
       type: String,
@@ -20,7 +14,7 @@ const schema = new mongose.Schema(
   { versionKey: false }
 );
 
-const Model = mongose.model("userDetails", schema);
+const Model = mongoose.model("userDetails", schema);
 
 export const insert = async ({ username, password }) => {
   try {

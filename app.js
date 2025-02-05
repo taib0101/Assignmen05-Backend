@@ -58,7 +58,7 @@ app.post("/create/*", async (req, res) => {
 
     return res.status(200).json({
       status: "ok",
-      description: `${req.url} Inserted ${req.body.username} successfully`
+      description: `${req.url} Inserted ${req.query.username} successfully`
     })
   } catch (error) {
     return res.status(500).json({
@@ -88,6 +88,8 @@ app.get("/read/*", async (req, res) => {
     });
   }
 })
+
+
 
 app.listen(3000, () => {
   console.log("Listening port 3000 .....");

@@ -29,39 +29,27 @@ const Model = mongoose.model("userTask", schema);
 
 export const insertTask = async (req) => {
   try {
-    let data = await Model.findOne({ username: req.body.username });
-    // console.log("find data and insert :", data);
-    // console.log("insert task request body :", req.body);
+    let data = await Model.findOne({ username: req.query.username });
 
-    const blogTeamService = req.url
-      .split("/")
+    let blogTeamService = req.url.split("/");
+    blogTeamService = blogTeamService[2]
+      .split("?")
       .filter(
         (value) => value === "blog" || value === "team" || value === "service"
       )
       .join("");
 
-    if (data === null) {
-      const array = [];
-      array.push({
-        name: req.body.name,
-        description: req.body.description,
-      });
-      console.log("array :", array);
-
-      data = await Model({
-        username: req.body.username,
-        [blogTeamService]: array,
-      });
-    } else {
-      data[blogTeamService].push({
-        name: req.body.name,
-        description: req.body.description,
-      });
-    }
+    data[blogTeamService].push({
+      name: req.body.name,
+      description: req.body.description,
+    });
     await data.save();
 
-    console.log("split url :", blogTeamService);
-    console.log("username all :", data[blogTeamService]);
+    console.log("url :", req.url);
+    console.log("blogTeamService :", blogTeamService);
+    console.log("data[blogTeamService] :", data[blogTeamService]);
+    console.log("find data and insert :", data);
+    console.log("insert task request body :", req.body);
 
     return "ok";
   } catch (error) {
@@ -72,7 +60,7 @@ export const insertTask = async (req) => {
 
 export const readTask = async (req) => {
   try {
-    const data = await Model.findOne({ username: req.query.username });
+    let data = await Model.findOne({ username: req.query.username });
     let blogTeamService = req.url.split("/");
     blogTeamService = blogTeamService[2]
       .split("?")
@@ -80,9 +68,20 @@ export const readTask = async (req) => {
         (value) => value === "blog" || value === "team" || value === "service"
       )
       .join("");
-    // console.log("read fetch url :", req.url);
-    // console.log("read fetch url query :", req.query);
-    // console.log("bro :", blogTeamService);
+
+    if (data === null) {
+      data = await Model({
+        username: req.query.username,
+        blogTeamService: [],
+      });
+      data.save();
+    }
+
+    console.log("read fetch url :", req.url);
+    console.log("read fetch url query :", req.query);
+    console.log("blogTeamService :", blogTeamService);
+    console.log("data :", data);
+    console.log("data[blogTeamService] :", data[blogTeamService]);
 
     return {
       status: "ok",

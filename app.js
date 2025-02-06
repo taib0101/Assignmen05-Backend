@@ -5,6 +5,16 @@ import { connect } from "./model/connect.js";
 import { insert, read } from "./model/userModel.js";
 import { deleteTask, insertTask, readTask, updateTask } from "./model/userTask.js";
 
+import url from "url";
+import path from "path";
+import dotenv from "dotenv";
+
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const pathJoin = path.join(__dirname, "./config/.env");
+
+dotenv.config({ path: pathJoin })
+
 const app = express();
 const router = express.Router();
 
@@ -128,6 +138,6 @@ app.get("/delete/*/:id", async (req, res) => {
   }
 })
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
   console.log("Listening port 3000 .....");
 });

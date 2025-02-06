@@ -2,7 +2,9 @@ import mongoose from "mongoose";
 
 const schema = new mongoose.Schema(
   {
-    username: String,
+    username: {
+      type: String,
+    },
     blog: [
       {
         name: String,
@@ -69,14 +71,17 @@ export const readTask = async (req) => {
       )
       .join("");
 
+    console.log("data :");
+
     if (data === null) {
       data = await Model({
         username: req.query.username,
         blogTeamService: [],
       });
-      data.save();
-    }
 
+    }
+    
+    await data.save();
     // console.log("read fetch url :", req.url);
     // console.log("read fetch url query :", req.query);
     // console.log("blogTeamService :", blogTeamService);
